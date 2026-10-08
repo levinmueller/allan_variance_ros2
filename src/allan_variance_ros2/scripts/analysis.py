@@ -290,3 +290,25 @@ fig2.savefig('gyro.png', dpi=600, bbox_inches = "tight")
 
 print("Writing Kalibr imu.yaml file.")
 print("Make sure to update rostopic and rate.")
+
+
+# VN-100 IMU Datasheet-style plots
+def plot_VN100_Datasheet_style(data, ylabel, ylim, filename):
+	fig, (ax_xy, ax_z) = plt. subplots(1, 2, figsize=(10, 4))
+	ax_xy.loglog(period, data[:, 0], color="#a6192e", label="X")
+	ax_xy.loglog(period, data[:, 1], color="#e07b39", label="Y")
+	ax_xy.legend()
+	ax_z.loglog(period, data[:, 0], color="#a6192e", label="Z")
+	for ax, caption in [(ax_xy, "(a) XY-Axis Allan Deviation"), (ax_z, "(b) Z-Axis Allan Deviation")]:
+		ax.set_xlim(1, 4000)
+		ax.set_ylim(*ylim)
+		ax.set_xlabel("Time Constant, $\\tau$ (s)\n" + caption)
+		ax.set_ylabel(ylabel)
+		ax.grid(True, which="both", linestyle=":")
+	fig.tight_layout()
+	fig.savefig(filename, dpi=200, bbox_inches="tight")
+	plt.close(fig)
+
+plot_VN100_Datasheet_style(acceleration / 9.80665 * 1e6, "Allan Deviation ($\\mu$g)", (10, 200), "acceleration_datasheet.png")
+plot_VN100_Datasheet_style(rotation_rate * 3600, "Allan Deviation (deg/hr)", (1, 20), "gyro_datasheet.png")
+print("Wrote acceleration_datasheet.png and gyro_datasheet.png")

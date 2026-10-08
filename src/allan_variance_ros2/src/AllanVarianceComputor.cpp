@@ -107,6 +107,11 @@ void AllanVarianceComputor::run(std::string bag_path) {
           Eigen::Vector3d(imu_msg->angular_velocity.x, imu_msg->angular_velocity.y, imu_msg->angular_velocity.z);
 
       imuBuffer_.push_back(input);
+
+      if (imuBuffer_.size() % 100000 == 0) {
+        RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "Buffered " << imuBuffer_.size() << " measurements ("
+                          << (tCurrNanoSeconds_ - firstTime_) * 1e-9 / 3600.0 << "h of data)");
+      }
     }
 
       if (!rclcpp::ok()) {

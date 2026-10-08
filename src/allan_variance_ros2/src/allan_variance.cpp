@@ -66,7 +66,8 @@ int main(int argc, char** argv) {
   }
   
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<AllanVarianceRos2>(bag_path, config_file, output_path));
+  //rclcpp::spin(std::make_shared<AllanVarianceRos2>(bag_path, config_file, output_path));
+  std::make_shared<AllanVarianceRos2>(bag_path, config_file, output_path);
   rclcpp::shutdown();
   return 0;
 }
